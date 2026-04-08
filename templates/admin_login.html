@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block title %}Admin Login — EduVote{% endblock %}
+
+{% block content %}
+<style>
+  body {
+    margin: 0;
+    height: 100vh;
+    background: linear-gradient(-45deg, #ee6a28, #f0f1f1, #6cb76c, #f8810b);
+    background-size: 400% 400%;
+    animation: gradientBG 10s ease infinite;
+}
+
+@keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Keep your login card readable */
+.card {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+}
+</style>
+<div style="max-width:380px;margin:4rem auto;">
+  
+  <h1 style="font-size:1.8rem;margin-bottom:0.3rem;">Admin Login</h1>
+  
+  <p style="color:var(--muted);margin-bottom:2rem;font-size:0.9rem;">
+    Restricted access — authorized personnel only.
+  </p>
+
+  <div style="border-radius: 20px; background-color: #1a1a1a;" class="card">
+    <form method="POST">
+
+      <div class="form-group">
+        <label style="color: rgb(255, 255, 255);">Username</label>
+        <input name="username" type="text" placeholder="admin" required />
+      </div>
+
+      <div class="form-group">
+        <label style="color: white;">Password</label>
+        <input name="password" type="password" placeholder="••••••••" required />
+      </div>
+
+      <button type="submit" class="btn btn-primary"
+        style="width:100%;justify-content:center;padding:0.75rem;">
+        Access Admin Panel
+      </button>
+
+    </form>
+  </div>
+
+  <p style="text-align:center;margin-top:1rem;font-size:0.82rem;color:var(--muted);">
+    Default: admin / admin123
+  </p>
+
+</div>
+{% endblock %}
