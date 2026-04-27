@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- Import Google Fonts for modern typography -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>{% block title %}EduVote — Secure Campus Elections{% endblock %}</title>
+  <script>
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+  </script>
+  <style>
+    :root {
+      --bg: #fffbf5;
+      --surface: rgba(255, 255, 255, 0.85);
+      --card: rgba(255, 255, 255, 0.95);
+      --border: rgba(255, 153, 51, 0.3);
+      --accent: #000080;
+      --accent2: #00005E;
+      --success: #138808;
+      --warning: #FF9933;
+      --danger: #ef4444;
+      --text: #2f2a24;
+      --muted: #6b5c46;
+      --shadow: 0 10px 25px -5px rgba(255, 153, 51, 0.1), 0 8px 10px -6px rgba(0, 0, 128, 0.05);
+      --surface-hover: #fff3e6;
+      --glass-blur: blur(12px);
+    }
+    
+    [data-theme="dark"] {
+      --bg: #1a1410;
+      --surface: rgba(43, 30, 20, 0.75);
+      --card: rgba(43, 30, 20, 0.9);
+      --border: rgba(255, 153, 51, 0.4);
+      --accent: #4d4dff; 
+      --accent2: #6666ff;
+      --success: #1bba0f; 
+      --warning: #ffb366; 
+      --danger: #ef4444; 
+      --text: #fdfaf5;
+      --muted: #bda286;
+      --shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.6), 0 8px 10px -6px rgba(255, 153, 51, 0.2);
+      --surface-hover: rgba(69, 48, 30, 0.9);
+      --glass-blur: blur(16px);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      background-image: radial-gradient(at 0% 0%, rgba(255, 153, 51, 0.12) 0px, transparent 50%),
+                        radial-gradient(at 100% 100%, rgba(19, 136, 8, 0.08) 0px, transparent 50%);
+      background-attachment: fixed;
+      color: var(--text);
+      min-height: 100vh;
+      transition: background-color 0.4s ease, color 0.4s ease;
+      line-height: 1.6;
+    }/* ── NAV ── */
+    nav {
+      background: var(--surface);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .nav-brand {
+      font-weight: 800;
+      font-size: 1.4rem;
+      color: var(--text);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      letter-spacing: -0.5px;
+    }
+    .nav-brand span {
+      background: linear-gradient(135deg, var(--warning), var(--accent), var(--success));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .nav-links { display: flex; gap: 0.8rem; align-items: center; }
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      padding: 0.4rem 1rem;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 500;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .nav-links a:hover { color: var(--text);  background: var(--surface-hover); }
+    .btn {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      padding: 0.5rem 1.2rem; border-radius: 6px;
+      font-family: inherit; font-size: 0.9rem; font-weight: 500;
+      cursor: pointer; text-decoration: none; border: none;
+      transition: all 0.2s ease;
+    }
+    .btn-primary { background: var(--accent); color: #fff; border: 1px solid var(--accent); }
+    .btn-primary:hover { background: var(--accent2); }
+    .btn-outline { background: transparent; color: var(--accent); border: 1px solid var(--accent); }
+    .btn-outline:hover { background: #f8f9fa; }
+    .btn-success { background: var(--success); color: #fff; }
+    .btn-danger { background: var(--danger); color: #fff; }
+    .btn-warning { background: var(--warning); color: #000; }
+    /* ── ALERTS ── */
+    .alerts { padding: 1rem 2rem 0; }
+    .alert {
+      padding: 0.75rem 1rem; border-radius: 6px; margin-bottom: 0.5rem;
+      font-size: 0.9rem; border: 1px solid transparent;
+      animation: slideDown 0.4s ease-out forwards;
+      transition: opacity 0.5s ease;
+    }
+    .alert-success { background: #d1e7dd; border-color: #badbcc; color: #0f5132; }
+    .alert-error { 
+      background: #f8d7da; border-color: #f5c2c7; color: #842029;
+      animation: slideDown 0.4s ease-out forwards, shake 0.5s ease-in-out 0.4s;
+    }
+    
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-5px); }
+      40%, 80% { transform: translateX(5px); }
+    }
+    /* ── MAIN ── */
+    main { padding: 3rem 2rem; max-width: 1200px; margin: 0 auto; }
+    h1, h2, h3 { letter-spacing: -0.025em; font-weight: 700; }
+    .card {
+      background: var(--card); 
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--border);
+      border-radius: 12px; padding: 2rem;
+      box-shadow: var(--shadow);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .card:hover {
+      box-shadow: 0 25px 30px -10px rgba(0, 0, 0, 0.08);
+      transform: translateY(-2px);
+    }
+    /* ── FORM ── */
+    .form-group { margin-bottom: 1.2rem; }
+    .form-group label { display: block; font-size: 0.85rem; color: var(--text); margin-bottom: 0.4rem; font-weight: bold; }
+    .form-group input, .form-group textarea, .form-group select {
+      width: 100%; padding: 0.75rem 1rem;
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: 8px; color: var(--text); font-family: inherit;
+      font-size: 0.95rem;
+      transition: all 0.2s ease;
+    }
+    .form-group input:focus, .form-group textarea:focus {
+      outline: none; border-color: var(--accent); box-shadow: 0 0 0 4px rgba(0, 0, 128, 0.15); background: var(--surface);
+    }
+    /* ── BADGE ── */
+    .badge {
+      display: inline-block; padding: 0.2rem 0.6rem;
+      border-radius: 4px; font-size: 0.75rem; font-weight: normal;
+    }
+    .badge-blue { background: #cfe2ff; color: #084298; }
+    .badge-green { background: #d1e7dd; color: #0f5132; }
+    .badge-yellow { background: #fff3cd; color: #664d03; }
+    .badge-red { background: #f8d7da; color: #842029; }
+    /* ── TABLE ── */
+    table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+    th { padding: 0.75rem 1rem; text-align: left; color: var(--text); font-weight: bold; border-bottom: 2px solid var(--border); }
+    td { padding: 0.75rem 1rem; border-bottom: 1px solid var(--border); }
+    tr:hover td { background: var(--surface-hover); }
+    /* ── SECURITY BADGE ── */
+    .ssl-badge {
+      display: flex; align-items: center; gap: 0.3rem;
+      font-size: 0.75rem; color: #0f5132; background: #d1e7dd;
+      padding: 0.25rem 0.6rem; border-radius: 4px; border: 1px solid #badbcc;
+    }
+    
+    /* ── AUTH WRAP GLOBALS ── */
+    .auth-wrap { max-width: 440px; margin: 4rem auto; }
+    .auth-wrap h1 { font-size: 1.8rem; margin-bottom: 0.3rem; }
+    .auth-wrap p { color: var(--muted); margin-bottom: 2rem; font-size: 0.95rem; }
+    .auth-footer { text-align: center; margin-top: 1.2rem; font-size: 0.9rem; color: var(--muted); }
+    .auth-footer a { color: var(--accent); text-decoration: none; font-weight: 500; }
+  </style>
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+<nav>
+   <a href="{{ url_for('voter.index') }}" class="nav-brand">
+    <img src="https://upload.wikimedia.org/wikipedia/en/4/41/Flag_of_India.svg" 
+         alt="Indian Flag" 
+         style="width:28px; height:auto; margin-right:4px;">
+    <span>EduVote</span>
+</a>
+  <div class="nav-links">
+    {% if g.get('voter_id') %}
+      <a href="{{ url_for('voter.dashboard') }}">Dashboard</a>
+      <a href="{{ url_for('voter.results') }}">Results</a>
+      <a href="{{ url_for('voter.logout') }}" class="btn btn-outline" style="border-color:var(--danger);color:var(--danger);">Logout</a>
+    {% elif session.get('admin_id') %}
+      <a href="{{ url_for('admin.admin_dashboard') }}">Admin Panel</a>
+      <a href="{{ url_for('admin.admin_logout') }}" class="btn btn-outline" style="border-color:var(--danger);color:var(--danger);">Logout</a>
+    {% else %}
+      <a href="{{ url_for('voter.results') }}">Results</a>
+      <a href="{{ url_for('voter.login') }}">Login</a>
+      <a href="{{ url_for('voter.register') }}" class="btn btn-primary" style="box-shadow: 0 4px 14px 0 rgba(0, 0, 128, 0.39);">Register</a>
+    {% endif %}
+    <button id="theme-toggle" class="btn btn-outline" style="padding: 0.4rem; border: none; font-size: 1.3rem; min-width: 40px; margin-left: 0.5rem; background:transparent;" title="Toggle Theme">
+      ☀️
+    </button>
+  </div>
+</nav>
+
+<div class="alerts">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% for cat, msg in messages %}
+      <div class="alert alert-{{ cat }}">{{ msg }}</div>
+    {% endfor %}
+  {% endwith %}
+</div>
+
+<main>{% block content %}{% endblock %}</main>
+
+<script>
+  setTimeout(() => {
+    document.querySelectorAll('.alert').forEach(a => a.style.opacity = '0');
+  }, 4000);
+
+  // Theme toggle script
+  const themeToggle = document.getElementById('theme-toggle');
+  
+  function updateToggleButtonIcon() {
+    if (document.documentElement.getAttribute('data-theme') === 'dark') {
+      themeToggle.textContent = '☀️';
+    } else {
+      themeToggle.textContent = '🌙';
+    }
+  }
+
+  // Initial call
+  updateToggleButtonIcon();
+
+  themeToggle.addEventListener('click', () => {
+    let currentTheme = document.documentElement.getAttribute('data-theme');
+    let targetTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    
+    document.documentElement.setAttribute('data-theme', targetTheme);
+    localStorage.setItem('theme', targetTheme);
+    updateToggleButtonIcon();
+  });
+</script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% block title %}EduVote — Secure Campus Elections{% endblock %}
+{% block extra_css %}
+<style>
+.hero {
+  font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  min-height: calc(100vh - 64px);
+  display: flex; flex-direction: column;
+  justify-content: center; align-items: center;
+  text-align: center; position: relative; overflow: hidden;
+  padding: 4rem 2rem;
+  margin: -2rem;
+  background: radial-gradient(circle at center, var(--surface-hover) 0%, var(--bg) 100%);
+}
+.hero-tag {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  background: rgba(255, 153, 51, 0.1); border: 1px solid rgba(255, 153, 51, 0.3);
+  color: var(--warning); padding: 0.35rem 0.9rem; border-radius: 50px;
+  font-size: 0.85rem; font-weight: 600; margin-bottom: 1.5rem;
+}
+.hero h1 {
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  line-height: 1.2; font-weight: 800;
+  margin-bottom: 1rem;
+  color: var(--text);
+  letter-spacing: -0.03em;
+}
+.hero p {
+  font-size: 1.15rem; color: var(--muted); max-width: 520px;
+  line-height: 1.7; margin-bottom: 2rem;
+}
+.hero-btns {
+  display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;
+}
+.hero-btns .btn { padding: 0.75rem 1.8rem; font-size: 1rem; }
+.features {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr));
+  gap: 1rem; margin-top: 5rem; width: 100%; max-width: 900px;
+}
+.feat {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 6px; padding: 1.2rem;
+}
+.feat-icon { font-size: 1.8rem; margin-bottom: 0.6rem; }
+.feat h3 { font-size: 0.95rem; margin-bottom: 0.3rem; color: var(--text); }
+.feat p { font-size: 0.82rem; color: var(--muted); line-height: 1.5; }
+</style>
+{% endblock %}
+{% block content %}
+<div class="hero">
+  <div class="hero-tag">🔒 SSL/TLS Encrypted · Fernet AES-128 Vote Encryption</div>
+  <h1>Campus Elections,<br></h1>
+  <p>Cast your vote with standard encryption methods. Every ballot is securely processed.</p>
+  <div class="hero-btns">
+    <a href="{{ url_for('voter.register') }}" class="btn btn-primary">Register to Vote</a>
+    <a href="{{ url_for('voter.results') }}" class="btn btn-outline">View Results</a>
+  </div>
+  <div class="features">
+    <div class="feat">
+      <div class="feat-icon">🔐</div>
+      <h3>End-to-End Encryption</h3>
+      <p>Votes encrypted with AES-128 before storage.</p>
+    </div>
+    <div class="feat">
+      <div class="feat-icon">🌐</div>
+      <h3>HTTPS / SSL/TLS</h3>
+      <p>All traffic secured via SSL to prevent interception.</p>
+    </div>
+    <div class="feat">
+      <div class="feat-icon">🪪</div>
+      <h3>Identity Verification</h3>
+      <p>Student ID-based authentication with admin approval.</p>
+    </div>
+    <div class="feat">
+      <div class="feat-icon">📊</div>
+      <h3>Real-time Results</h3>
+      <p>Live tally with visual charts when enabled.</p>
+    </div>
+  </div>
+</div>
+{% endblock %}

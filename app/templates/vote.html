@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% block title %}Cast Vote — EduVote{% endblock %}
+{% block extra_css %}
+<style>
+.vote-header { margin-bottom: 2rem; }
+.vote-header h1 { font-size: 1.8rem; }
+.vote-header p { color: var(--muted); margin-top: 0.3rem; }
+.position-section { margin-bottom: 2rem; }
+.position-title {
+  font-family: Arial, Helvetica, sans-serif; font-size: 1rem; font-weight: bold;
+  text-transform: uppercase; letter-spacing: 0.07em;
+  color: var(--accent); margin-bottom: 1rem;
+  padding-bottom: 0.5rem; border-bottom: 1px solid var(--border);
+}
+.candidate-options { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px,1fr)); gap: 0.75rem; }
+.candidate-option { position: relative; }
+.candidate-option input[type=radio] { position: absolute; opacity: 0; pointer-events: none; }
+.candidate-label {
+  display: block; background: var(--card); border: 2px solid var(--border);
+  border-radius: 6px; padding: 1rem; cursor: pointer; transition: all 0.2s;
+}
+.candidate-label:hover { border-color: var(--accent); }
+.candidate-option input:checked + .candidate-label {
+  border-color: var(--accent); background: #f8f9fa;
+}
+.cl-name { font-family: Arial, Helvetica, sans-serif; font-weight: bold; margin-bottom: 0.2rem; }
+.cl-dept { font-size: 0.82rem; color: var(--muted); margin-bottom: 0.5rem; }
+.cl-manifesto { font-size: 0.8rem; color: var(--muted); line-height: 1.4; }
+.vote-submit {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 6px; padding: 1.5rem; margin-top: 1rem;
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+}
+.enc-note { font-size: 0.83rem; color: var(--muted); display: flex; align-items: center; gap: 0.5rem; }
+</style>
+{% endblock %}
+{% block content %}
+<div class="vote-header">
+  <h1>🗳 Cast Your Vote</h1>
+  <p>Select one candidate per position. Your vote will be encrypted before submission.</p>
+</div>
+
+<form method="POST">
+  {% set positions = [] %}
+  {% for c in candidates %}
+    {% if c.position not in positions %}
+      {% set _ = positions.append(c.position) %}
+    {% endif %}
+  {% endfor %}
+
+  {% for position in positions %}
+  <div class="position-section">
+    <div class="position-title">{{ position }}</div>
+    <div class="candidate-options">
+      {% for c in candidates if c.position == position %}
+      <div class="candidate-option">
+        <input type="radio" name="vote_{{ position.replace(' ','_') }}" id="c{{ c.id }}" value="{{ c.id }}"/>
+        <label class="candidate-label" for="c{{ c.id }}">
+          <div class="cl-name">{{ c.name }}</div>
+          <div class="cl-dept">🎓 {{ c.department }}</div>
+          <div class="cl-manifesto">{{ c.manifesto }}</div>
+        </label>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endfor %}
+
+  <div class="vote-submit">
+    <div class="enc-note">🔐 Your vote will be encrypted using AES-128 (Fernet) before being stored</div>
+    <button type="submit" class="btn btn-primary" style="padding:0.75rem 2rem;font-size:1rem;">
+      Submit Encrypted Vote
+    </button>
+  </div>
+</form>
+{% endblock %}

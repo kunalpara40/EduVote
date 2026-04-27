@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %}Verify Registration OTP — EduVote{% endblock %}
+{% block content %}
+<div class="auth-wrap">
+  <h1>Verify Email</h1>
+  <p>Please enter the 6-digit confirmation code we sent to your email to complete registration securely.</p>
+  <div class="card">
+    <form method="POST">
+      <div class="form-group">
+        <label>Verification Code</label>
+        <input name="otp" type="text" placeholder="e.g. 123456" required autofocus autocomplete="off"/>
+      </div>
+      <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;padding:0.75rem;">Complete Registration</button>
+    </form>
+  </div>
+</div>
+{% endblock %}
